@@ -46,15 +46,14 @@ PRESET_CHEMICALS = {
     "Caffeine (Central Nervous System Stimulant)": "CN1C=NC2=C1C(=O)N(C(=O)N2C)C",
     "Ibuprofen (NSAID Pain Reliever)": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
     "Bisphenol A / BPA (Plastics Additive & Endocrine Disruptor)": "CC(C)(C1=CC=C(O)C1)C2=CC=C(O)C2",
+    "Diethylstilbestrol / DES (Potent Synthetic Estrogen)": "CC/C(=C(\\CC)/C1=CC=C(O)C1)/C2=CC=C(O)C2",
     "Paracetamol / Acetaminophen (Fever Reducer)": "CC(=O)NC1=CC=C(O)C1",
     "Nicotine (Stimulant & Alkaloid)": "CN1CCCC1C2=CN=CC=C2",
     "Ethanol (Alcohol)": "CCO"
 }
 
-# Reverse mapping for canonical lookup
 SMILES_TO_NAME = {v: k for k, v in PRESET_CHEMICALS.items() if v}
 
-# --- Top Header ---
 st.title("Tox21 AI Toxicity & Activity-Cliff Inspector")
 st.markdown("""
 **System Overview**  
@@ -64,7 +63,6 @@ Our custom ToxGATv2 + ToxCliffLoss model detects activity cliffs—chemically si
 
 st.markdown("---")
 
-# --- Assay Reference Dictionary ---
 ASSAY_INFO = {
     'NR-AR': {"name": "Androgen Receptor", "desc": "Disrupts testosterone signaling and male reproductive balance."},
     'NR-AR-LBD': {"name": "Androgen Receptor Active Pocket", "desc": "Directly binds inside the active pocket of the androgen receptor."},
@@ -82,9 +80,6 @@ ASSAY_INFO = {
 
 tab1, tab2 = st.tabs(["Live Molecule Inspector", "Model Benchmarks & Reference Guide"])
 
-# -------------------------------------------------------------------
-# TAB 1: LIVE INFERENCE
-# -------------------------------------------------------------------
 with tab1:
     st.subheader("Interactive Toxicity Risk Analysis")
     st.caption("Select a preset everyday compound or type a custom SMILES string.")
@@ -95,10 +90,9 @@ with tab1:
         selected_preset = st.selectbox(
             "Quick Select Common Chemical", 
             options=list(PRESET_CHEMICALS.keys()),
-            index=4 # Defaults to BPA
+            index=4
         )
 
-    # Determine initial SMILES value based on dropdown selection
     default_smiles = PRESET_CHEMICALS[selected_preset] if selected_preset != "Select a common chemical..." else ""
 
     with col_custom:
@@ -161,9 +155,6 @@ with tab1:
                     st.markdown(get_risk_label(prob), unsafe_allow_html=True)
                     st.write("")
 
-# -------------------------------------------------------------------
-# TAB 2: BENCHMARKS & REFERENCE
-# -------------------------------------------------------------------
 with tab2:
     st.subheader("1. Bioassay Dictionary")
     st.caption("Detailed overview of biological targets assessed by the Tox21 framework.")
